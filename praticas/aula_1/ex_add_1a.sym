@@ -1,0 +1,24 @@
+GAS LISTING ex_add_1a.s 			page 1
+
+
+DEFINED SYMBOLS
+         ex_add_1a.s:5      *ABS*:0000000000000001 UP
+         ex_add_1a.s:6      *ABS*:0000000000000000 DOWN
+         ex_add_1a.s:7      *ABS*:0000000000000003 PUT_CHAR
+         ex_add_1a.s:8      *ABS*:0000000000000006 PRINT_INT
+         ex_add_1a.s:9      *ABS*:0000000000000001 INKEY
+         ex_add_1a.s:12     .text:0000000000000000 main
+         ex_add_1a.s:22     .text:000000000000001c do
+         ex_add_1a.s:79     .text:00000000000000cc wait
+         ex_add_1a.s:44     .text:0000000000000064 if_1
+         ex_add_1a.s:46     .text:0000000000000074 eif_1
+         ex_add_1a.s:47     .text:0000000000000074 if_2
+         ex_add_1a.s:49     .text:0000000000000084 eif_2
+         ex_add_1a.s:51     .text:0000000000000084 if3
+         ex_add_1a.s:55     .text:000000000000009c else_3
+         ex_add_1a.s:58     .text:00000000000000a4 eif_3
+         ex_add_1a.s:59     .text:00000000000000a4 while
+         ex_add_1a.s:84     .text:00000000000000dc for
+         ex_add_1a.s:87     .text:00000000000000f0 endf
+
+NO UNDEFINED SYMBOLS
