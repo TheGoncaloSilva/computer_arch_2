@@ -1,0 +1,9 @@
+Create the file - 'prog1.s'
+Compile the code - 'pcompile prog1.s'
+Machine Code - when compile is located in the .hex file
+Machine Code to Assembly - 'hex2asm' -> The file can be viewed in the '.hex.s' file
+Enviar programa para a placa - 'ldpic32 prog1.hex' + botão de reset da placa
+Executar o programa na placa - 'pterm' + botão de reset da placa
+
+Em alternativa, numa só linha de comandos - 'pcompile prog1.s && ldpic32 prog1.hex && pterm'
+
