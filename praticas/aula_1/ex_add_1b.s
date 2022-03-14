@@ -2,6 +2,7 @@
 				# state: $s0
 				# cnt: $s1
 				# c: $s2
+				# stopped: $s3
 	.equ UP,1
 	.equ DOWN,0
 	.equ PUT_CHAR,3
@@ -10,14 +11,16 @@
 	.text
 	.globl main
 main:
-	addiu $sp,$sp,-16	# Reservar espaço na stack
+	addiu $sp,$sp,-20	# Reservar espaço na stack
 	sw $ra,0($sp)		# Salvaguardar $ra
 	sw $s0,4($sp)		# Salvaguardar $s0
 	sw $s1,8($sp)		# Salvaguardar $s1
 	sw $s2,12($sp)		# Salvaguardar $s2
-
+	sw $s3,16($sp)		# Salvaguardar $s3
+	
 	li $s0,0		# state = 0;
 	li $s1,0		# cnt = 0;
+	li $s3,0		# stopped = 0;
 
 do:				# do {
 	li $a0,'\r'
@@ -42,7 +45,20 @@ do:				# do {
 	li $v0,INKEY
 	syscall			
 	move $s2,$v0		# c = inkey();
+	
+if_6:	bne $s2,'s',elif_6
+	bne $s3,1,elif_6	# if( c == 's' && stopped == '1')
+	li $s3,0		# stopped = 0;	
+	j eif_6
+elif_6: bne $s2,'s',eif_6	
+	bne $s3,0,eif_6		# if( c == 's' && stopped == '0')
+	li $s3,1
+eif_6:
 
+if_5:	beq $s3,0,eif_5		# if ( stopped != 0){
+if_4:	bne $s2,'r',eif_4	# if ( c == 'r')
+	li $s1,0		# cnt = 0 -> reset counter
+eif_4:
 if_1:	bne $s2,'+',eif_1	# if ( c == '+' )
 	li $s0,UP		# state = UP;
 eif_1:	
@@ -58,13 +74,16 @@ else_3:
 	addi $t0,$s1,-1		# $t0 = (cnt - 1);	
 	andi $s1,$t0,0xFF	# cnt = (cnt - 1) & 0xFF; -> Down counter MOD 256
 eif_3:
+eif_5:
+
 while:	bne $s2,'q',do		# } while( c != 'q');	
 	
-	addiu $sp,$sp,16	# Reservar espaço na stack
+	addiu $sp,$sp,20	# Reservar espaço na stack
 	lw $ra,0($sp)		# Salvaguardar $ra
 	lw $s0,4($sp)		# Salvaguardar $s0
 	lw $s1,8($sp)		# Salvaguardar $s1
 	lw $s2,12($sp)		# Salvaguardar $s2
+	lw $s2,16($sp)		# Salvaguardar $s2
 	
 	li $v0,0		# return 0;
 

@@ -1,0 +1,31 @@
+GAS LISTING ex_add_1b.s 			page 1
+
+
+DEFINED SYMBOLS
+         ex_add_1b.s:6      *ABS*:0000000000000001 UP
+         ex_add_1b.s:7      *ABS*:0000000000000000 DOWN
+         ex_add_1b.s:8      *ABS*:0000000000000003 PUT_CHAR
+         ex_add_1b.s:9      *ABS*:0000000000000006 PRINT_INT
+         ex_add_1b.s:10     *ABS*:0000000000000001 INKEY
+         ex_add_1b.s:13     .text:0000000000000000 main
+         ex_add_1b.s:25     .text:0000000000000024 do
+         ex_add_1b.s:100    .text:0000000000000134 wait
+         ex_add_1b.s:49     .text:0000000000000078 if_6
+         ex_add_1b.s:53     .text:0000000000000098 elif_6
+         ex_add_1b.s:56     .text:00000000000000b0 eif_6
+         ex_add_1b.s:58     .text:00000000000000b0 if_5
+         ex_add_1b.s:77     .text:0000000000000108 eif_5
+         ex_add_1b.s:59     .text:00000000000000b8 if_4
+         ex_add_1b.s:61     .text:00000000000000c8 eif_4
+         ex_add_1b.s:62     .text:00000000000000c8 if_1
+         ex_add_1b.s:64     .text:00000000000000d8 eif_1
+         ex_add_1b.s:65     .text:00000000000000d8 if_2
+         ex_add_1b.s:67     .text:00000000000000e8 eif_2
+         ex_add_1b.s:69     .text:00000000000000e8 if3
+         ex_add_1b.s:73     .text:0000000000000100 else_3
+         ex_add_1b.s:76     .text:0000000000000108 eif_3
+         ex_add_1b.s:79     .text:0000000000000108 while
+         ex_add_1b.s:105    .text:0000000000000148 for
+         ex_add_1b.s:108    .text:000000000000015c endf
+
+NO UNDEFINED SYMBOLS
