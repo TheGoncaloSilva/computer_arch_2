@@ -1,0 +1,6 @@
+20.000.000 = 1 seg
+2.000.000 = 0,1 seg
+200.000 = 0,01 seg
+20,000 = 0,001 seg -> 1ms <=> 1s = 1000ms
+
+O valor da constante "k" para que o "ms" seja igual a um atraso de 1ms é de 20.000.

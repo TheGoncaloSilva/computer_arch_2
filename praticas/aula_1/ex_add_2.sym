@@ -1,0 +1,29 @@
+GAS LISTING ex_add_2.s 			page 1
+
+
+DEFINED SYMBOLS
+          ex_add_2.s:5      *ABS*:0000000000000014 SIZE
+          ex_add_2.s:6      *ABS*:0000000000000008 PRINT_STRING
+          ex_add_2.s:7      *ABS*:0000000000000009 READ_STRING
+          ex_add_2.s:8      *ABS*:0000000000000006 PRINT_INT
+          ex_add_2.s:9      *ABS*:0000000000000007 PRINT_INT10
+          ex_add_2.s:11     .data:0000000000000000 txt1
+          ex_add_2.s:12     .data:0000000000000016 txt2
+          ex_add_2.s:14     .data:0000000000000024 str1
+          ex_add_2.s:16     .data:000000000000003c str2
+          ex_add_2.s:18     .data:0000000000000054 str3
+          ex_add_2.s:21     .text:0000000000000000 main
+          ex_add_2.s:87     .text:00000000000000ec strlen
+          ex_add_2.s:108    .text:0000000000000114 strcpy
+          ex_add_2.s:132    .text:0000000000000140 strcat
+          ex_add_2.s:170    .text:00000000000001a0 strcmp
+          ex_add_2.s:89     .text:00000000000000f0 for
+          ex_add_2.s:94     .text:000000000000010c endf
+          ex_add_2.s:111    .text:0000000000000118 for2
+          ex_add_2.s:117    .text:0000000000000138 endf2
+          ex_add_2.s:143    .text:0000000000000160 for3
+          ex_add_2.s:152    .text:0000000000000184 endf3
+          ex_add_2.s:171    .text:00000000000001a0 for4
+          ex_add_2.s:179    .text:00000000000001c8 endf4
+
+NO UNDEFINED SYMBOLS

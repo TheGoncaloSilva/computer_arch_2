@@ -1,0 +1,6 @@
+A frequência de incremento:
+200.000 : 20.000.000 = 0,01 segundos
+
+1/0,01(s) = freq = 100 Hz
+
+A frequência da variável counter é de 100 Hz.
