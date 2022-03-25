@@ -1,5 +1,5 @@
  # Dado que o valor máximo de um registo inteiro é de 2^(32) - 1 = 4294967295.
- # Ou seja, o valor máximo é 0,001 * 4294967295 = 42949672,95 (ms)
+ # Ou seja, o valor máximo é ( 4294967295 / 20 000 )(ms) porque 20 000 é 1 ms
 
 					# Mapa de registos:
 					# counter: $s0
