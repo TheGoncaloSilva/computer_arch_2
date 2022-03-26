@@ -27,11 +27,13 @@ loop:	lw $t1,PORTB($t0)
 
 	xori $t1,$t1,0x0009
 
+	# READ - MODIFY - WRITE (Ler sempre o LATE) -> Ler -> Modificar -> Escrever 
 	lw $t2, LATE($t0)
 
-	andi $t2,$t2,0xFFF0
-	or $t2,$t2,$t1
+	andi $t2,$t2,0xFFF0		# Reset primeiros 4 bits
+	or $t2,$t2,$t1			# merge
 
+	# Escrever o valor no porto de Saída
 	sw $t2, LATE($t0)
 	j loop
 endloop:

@@ -1,0 +1,5 @@
+O valor até que a função delay conta é k * ms -> 20 000 * 500 = 10 000 000
+
+10 000 000 / 20 000 000 = 0,5
+
+1/0,5 = 2 Hz -> frequência a que o led pisca

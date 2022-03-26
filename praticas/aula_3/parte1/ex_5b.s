@@ -1,10 +1,17 @@
 	.equ SFR_BASE_HI,0xBF88
+
 	.equ TRISB,0x6040
 	.equ PORTB,0x6050
 	.equ LATB,0x6060
+
 	.equ TRISE,0x6100
 	.equ PORTE,0x6110
 	.equ LATE,0x6120
+
+	.equ TRISD,0x60c0
+	.equ PORTD,0x60d0
+	.equ LATD,0x60e0
+ 
 	.equ READ_CORE_TIMER,11
 	.equ RESET_CORE_TIMER,12
 
@@ -21,8 +28,13 @@ main:
 conf:
 	# configurar RE0-3 como saída
 	lw $t1, TRISE($t0)
-	and $t1,$t1,0xFFF0		# alterar o 1º bit
+	and $t1,$t1,0xFFF0		# alterar o 4 bits
 	sw $t1, TRISE($t0)
+
+	# configurar RD0 como saída
+	lw $t1, TRISD($t0)
+	and $t1,$t1,0xFFFe		# isolar o 1º bit
+	sw $t1,TRISD($t0)
 	
 	li $s0,0			# counter = 0; -> guardar os registos
 
@@ -35,6 +47,12 @@ loop:
 	or $t2,$t2,$s0			# merge
 
 	sw $t2, LATE($t0)		# Escrever em RE
+	
+	# read-modify-write -> Saída no porto RD0
+	lw $t2, LATD($t0)
+	andi $t2,$t2,0xFFFe		# alterar o 1º bit
+	or $t2,$t2,$s0			# merge
+	sw $t2, LATD($t0)		# Escrever em RD0
 
 	li $a0,500
 	jal delay
