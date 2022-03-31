@@ -21,20 +21,15 @@ main:
 conf:	
 	lui $t0, SFR_BASE_HI		# $t0 = 0xBF880000
 	
-	# configurar RB0-RB3 como entrada
-	lw $t1, TRISB($t0)
-	ori $t1,$t1,0x000F		# Isolar colocar os 4 bits 1 
-	lw $t1, TRISB($t0)	
-
 	# configurar RE0-RB3 como saída
 	lw $t1, TRISE($t0)
 	andi $t1,$t1,0xFFF0		# Isolar 4 bits 
 	sw $t1, TRISE($t0)
 	
-	li $s0,0			# counter = 0;
+	li $s0,0x0000			# counter = 0;
 loop:
 	lui $t0, SFR_BASE_HI		# $t0 = 0xBF880000
-	
+		
 	# Read - Modify - Write
 	lw $t1, LATE($t0)
 	andi $t1,$t1,0xFFF0		# Escolher RE0-RE3
@@ -44,14 +39,21 @@ loop:
 	# DEBUG
 	move $a0,$s0
 	li $v0, PRINT_INT10
-	syscall				# printInt10(counter);
+	syscall				# printInt10(counter)
 
-	li $a0,1000			# 1000ms = 1s = 1Hz
+	li $a0,750			# 1000ms = 1s = 1Hz
 	jal delay
 
-	addi $s0,$s0,1			# counter ++;
-#	addi $s0,$s0,-1			# counter --; para o exercício 2
-	
+	andi $t1,$s0,0x0008		# Isolar MSB
+	srl $t1,$t1,3
+
+	sll $s0,$s0,1			# counter << 1
+	andi $t0,$s0,0x0001		# Isolar o LSB
+	xori $t0,$t0,0x0001		# negar o LSB
+	xor $t0,$t0,$t1			# xor com o MSB e o LSB
+
+	or $s0,$s0,$t0			# Merge			
+
 	andi $s0,$s0,0x000F 		# Isolar 4 bits (ou seja, impede a escrita nos registos 
 					# acima de RB3 e impede o contador de ultrapassar 0xF)
 

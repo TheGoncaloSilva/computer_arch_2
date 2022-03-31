@@ -14,9 +14,10 @@
 	.text
 	.globl main
 main: 	
-	addiu $sp,$sp,-8		# Prólogo
+	addiu $sp,$sp,-12		# Prólogo
 	sw $ra,0($sp)			# Guardar $ra
 	sw $s0,4($sp)			# Guardar counter
+	sw $s1,8($sp)			# Guardar sentido
 	
 conf:	
 	lui $t0, SFR_BASE_HI		# $t0 = 0xBF880000
@@ -31,10 +32,14 @@ conf:
 	andi $t1,$t1,0xFFF0		# Isolar 4 bits 
 	sw $t1, TRISE($t0)
 	
-	li $s0,0			# counter = 0;
+	li $s0,0x0001			# counter = 0;
 loop:
 	lui $t0, SFR_BASE_HI		# $t0 = 0xBF880000
-	
+		
+	# Ler o valor do porto RB3
+	lw $s1,PORTB($t0)
+	andi $s1,$s1,0x0002		# Isolar o valor de RB1
+
 	# Read - Modify - Write
 	lw $t1, LATE($t0)
 	andi $t1,$t1,0xFFF0		# Escolher RE0-RE3
@@ -44,13 +49,22 @@ loop:
 	# DEBUG
 	move $a0,$s0
 	li $v0, PRINT_INT10
-	syscall				# printInt10(counter);
+	syscall				# printInt10(counter)
 
-	li $a0,1000			# 1000ms = 1s = 1Hz
+	li $a0,333			# 1000ms = 1s = 1Hz
 	jal delay
 
-	addi $s0,$s0,1			# counter ++;
-#	addi $s0,$s0,-1			# counter --; para o exercício 2
+if:	bne $s1,1,else			# if(RB3 == 1)
+	sll $s0,$s0,1			# counter = counter << 1;
+if2:	blt $s0,0x10,endif2		# if(counter >= 8)
+	li $s0,1
+endif2:
+	j endif
+else:	
+	sra $s0,$s0,1			# counter = counter >> 1;
+	bne $s0,0,endif			# if(counter == 0)
+	li $s0,0x8
+endif:	
 	
 	andi $s0,$s0,0x000F 		# Isolar 4 bits (ou seja, impede a escrita nos registos 
 					# acima de RB3 e impede o contador de ultrapassar 0xF)
@@ -59,7 +73,8 @@ loop:
 endloop:	
 	lw $ra,0($sp)			# Repor $ra
 	lw $s0,4($sp)			# Repor counter
-	addiu $sp,$sp,8			# Epílogo
+	lw $s1,8($sp)			# Repor sentido
+	addiu $sp,$sp,12		# Epílogo
 	li $v0,0			# return 0;
 
 	jr $ra				# Fim da função main
