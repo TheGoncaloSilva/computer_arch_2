@@ -11,7 +11,7 @@ int main(void){
 	TRISB = TRISB & 0x80FF; // RB8-RB14 como saída
 	TRISD = TRISD & 0xFFCF;	// RD5, RD6 como saída
 	TRISDbits.TRISD5 = 0;
-    TRISDbits.TRISD6 = 0;
+    	TRISDbits.TRISD6 = 0;
 	
 	LATDbits.LATD5 = 1;
 	LATDbits.LATD6 = 0;

@@ -54,11 +54,11 @@ loop:
 	li $a0,500			# 1000ms = 1s = 1Hz
 	jal delay
 
-if:	bne $s1,1,else			# if(RB3 == 1)
+if:	bne $s1,0x0008,else		# if(RB3 == 1)
 	addi $s0,$s0,1			# counter ++;
 	j endif
 else:	
-	addi $s0,$s0,-1			# counter --;
+	addi $s0,$s0,-1		# counter --;
 endif:	
 	
 	andi $s0,$s0,0x000F 		# Isolar 4 bits (ou seja, impede a escrita nos registos 

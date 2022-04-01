@@ -39,23 +39,19 @@ loop:
 	# DEBUG
 	move $a0,$s0
 	li $v0, PRINT_INT10
-	syscall				# printInt10(counter)
+	syscall					# printInt10(counter)
 
-	li $a0,667			# 1/x=1,5 <=> x ≃ 0,667
+	li $a0,667				# 1/x=1,5 <=> x ≃ 0,667
 	jal delay
 
-	andi $t1,$s0,0x0008		# Isolar MSB
-	sll $t1,$t1,3
-
-	srl $s0,$s0,1			# counter << 1
-	andi $t0,$s0,0x0001		# Isolar o LSB
-	xori $t0,$t0,0x0001		# negar o LSB
-	xor $t0,$t0,$t1			# xor com o MSB e o LSB
-
+	srl $s0,$s0,1
+	sll $t0,$s0,3
+	andi $t0,$t0,0x0008		# Isolar o MSB
+	xori $t0,$t0,0x0008		# negar o MSB
 	or $s0,$s0,$t0			# Merge			
 
-	andi $s0,$s0,0x000F 		# Isolar 4 bits (ou seja, impede a escrita nos registos 
-					# acima de RB3 e impede o contador de ultrapassar 0xF)
+	andi $s0,$s0,0x000F 	# Isolar 4 bits (ou seja, impede a escrita nos registos 
+							# acima de RB3 e impede o contador de ultrapassar 0xF)
 
 	j loop
 endloop:	

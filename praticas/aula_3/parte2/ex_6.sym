@@ -15,8 +15,8 @@ DEFINED SYMBOLS
               ex_6.s:16     .text:0000000000000000 main
               ex_6.s:21     .text:000000000000000c conf
               ex_6.s:30     .text:0000000000000020 loop
-              ex_6.s:76     .text:0000000000000080 delay
-              ex_6.s:61     .text:000000000000006c endloop
-              ex_6.s:79     .text:0000000000000088 while2
+              ex_6.s:72     .text:0000000000000078 delay
+              ex_6.s:57     .text:0000000000000064 endloop
+              ex_6.s:75     .text:0000000000000080 while2
 
 NO UNDEFINED SYMBOLS
