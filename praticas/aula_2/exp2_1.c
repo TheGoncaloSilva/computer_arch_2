@@ -1,6 +1,6 @@
 #include <detpic32.h>
 
-void delay(unsigned int ms); // declare the functio to the compiler
+void delay(unsigned int ms); // declare the function to the compiler
 
 int main(void){
 

@@ -14,14 +14,20 @@
 	.text
 	.globl main
 main: 	
-	addiu $sp,$sp,-8		# Prólogo
+	addiu $sp,$sp,-12		# Prólogo
 	sw $ra,0($sp)			# Guardar $ra
 	sw $s0,4($sp)			# Guardar counter
-	
+	sw $s1,8($sp)				
+
 conf:	
 	lui $t0, SFR_BASE_HI		# $t0 = 0xBF880000
 	
-	# configurar RE0-RE3 como saída
+	# configurar RB0-RB3 como entrada
+	lw $t1, TRISB($t0)
+	ori $t1,$t1,0x000F		# Isolar colocar os 4 bits 1 
+	lw $t1, TRISB($t0)	
+
+	# configurar RE0-RB3 como saída
 	lw $t1, TRISE($t0)
 	andi $t1,$t1,0xFFF0		# Isolar 4 bits 
 	sw $t1, TRISE($t0)
@@ -30,6 +36,10 @@ conf:
 loop:
 	lui $t0, SFR_BASE_HI		# $t0 = 0xBF880000
 		
+	# Ler o valor do porto RB3
+	lw $s1,PORTB($t0)
+	andi $s1,$s1,0x0004		# Isolar o valor de RB2
+
 	# Read - Modify - Write
 	lw $t1, LATE($t0)
 	andi $t1,$t1,0xFFF0		# Escolher RE0-RE3
@@ -41,8 +51,10 @@ loop:
 	li $v0, PRINT_INT10
 	syscall				# printInt10(counter)
 
-	li $a0,667			# 1/x=1,5 <=> x ≃ 0,667
+	li $a0,667			# 1000ms = 1s = 1Hz
 	jal delay
+
+if:	bne $s1,1,else			# if(RB2 == 1)
 
 	andi $t1,$s0,0x0008		# Isolar MSB
 	srl $t1,$t1,3
@@ -52,8 +64,21 @@ loop:
 	xori $t0,$t0,0x0001		# negar o LSB
 	xor $t0,$t0,$t1			# xor com o MSB e o LSB
 
-	or $s0,$s0,$t0			# Merge			
+	or $s0,$s0,$t0			# Merge	
 
+	j endif
+else:
+	andi $t1,$s0,0x0008		# Isolar MSB
+	sll $t1,$t1,3
+
+	srl $s0,$s0,1			# counter << 1
+	andi $t0,$s0,0x0001		# Isolar o LSB
+	xori $t0,$t0,0x0001		# negar o LSB
+	xor $t0,$t0,$t1			# xor com o MSB e o LSB
+
+	or $s0,$s0,$t0			# Merge	
+endif:	
+	
 	andi $s0,$s0,0x000F 		# Isolar 4 bits (ou seja, impede a escrita nos registos 
 					# acima de RB3 e impede o contador de ultrapassar 0xF)
 
@@ -61,7 +86,8 @@ loop:
 endloop:	
 	lw $ra,0($sp)			# Repor $ra
 	lw $s0,4($sp)			# Repor counter
-	addiu $sp,$sp,8			# Epílogo
+	lw $s1,8($sp)
+	addiu $sp,$sp,12		# Epílogo
 	li $v0,0			# return 0;
 
 	jr $ra				# Fim da função main

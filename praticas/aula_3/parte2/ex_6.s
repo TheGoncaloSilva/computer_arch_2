@@ -45,9 +45,9 @@ loop:
 	jal delay
 
 	andi $t1,$s0,0x0008		# Isolar MSB
-	srl $t1,$t1,3
+	sll $t1,$t1,3
 
-	sll $s0,$s0,1			# counter << 1
+	srl $s0,$s0,1			# counter << 1
 	andi $t0,$s0,0x0001		# Isolar o LSB
 	xori $t0,$t0,0x0001		# negar o LSB
 	xor $t0,$t0,$t1			# xor com o MSB e o LSB
