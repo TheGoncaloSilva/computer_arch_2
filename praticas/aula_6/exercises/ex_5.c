@@ -2,6 +2,9 @@
 
 #define K (PBCLK / 1000)
 
+int voltage_converter(int val_AD);
+void delay(unsigned int ms);
+
 int main(void){
 	// configurar porto RB4 como entrada analógica
 	TRISBbits.TRISB4 = 1;	// RB4 configurado como saída digital
@@ -17,19 +20,31 @@ int main(void){
 
 	AD1CON1bits.ON = 1;		// Ativar o conversor A/D
 
-	int i;
+	int i, vol;
 	while(1){
 		AD1CON1bits.ASAM = 1;	// Iniciar a conversão
 		while( IFS1bits.AD1IF == 0 );	// Esperar pela conclusão da conversão -> polling
+
 		int *p = (int *)(&ADC1BUF0);
+
+		vol = 0;
 		for( i = 0; i < 16; i++ ) {
-			printInt( p[i*4], 16 | 3 << 16 );
-			putChar(' ');
+			vol += voltage_converter(p[i*4]);
 		}
-		putChar('\n');
+		printInt(vol/4, 10 | 2 << 16); // imprime 0 - 33
+		putChar('\r');
 		IFS1bits.AD1IF = 0;		// desativar/reset manual da operação
 
 	}
 
 	return 0;
+}
+
+int voltage_converter(int val_AD){
+	return (val_AD * 33 + 511) / 1023;
+}
+
+void delay(unsigned int ms){
+	resetCoreTimer();
+	while(readCoreTimer() < K * ms);
 }
