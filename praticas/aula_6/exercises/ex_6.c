@@ -38,7 +38,7 @@ int main(void){
 				vol += voltage_converter(p[i*4]);
 			}
 		}
-		send2displays(toBcd(vol/4)); // Ecras -> 00 - 41
+		send2displays(toBcd(vol/5)); // Ecras -> 00 - 41
 		delay(10);
 		//cnt = (cnt + 1) % 20;
 	}
