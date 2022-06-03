@@ -1,5 +1,6 @@
 #include <detpic32.h>
 #define K (PBCLK / 1000)
+#define VECTOR_UART2 32
 
 void configUart2(unsigned int baud, char parity, unsigned int stopbits){
 	// Configure BaudRate Generator
@@ -37,10 +38,26 @@ void configUart2(unsigned int baud, char parity, unsigned int stopbits){
 	U2MODEbits.ON = 1;	// 4 – Enable UART2 (see register U2MODE)
 }
 
+void putc(char byte2send) {
+	while( U2STAbits.UTXBF == 1 );	// wait while UTXBF == 1
+	U2TXREG = byte2send;	// Copy byte2send to the UxTXREG register
+}
+
+void _int_(VECTOR_UART2) isr_uart2(void)
+{
+	if (IFS1bits.U2RXIF == 1)
+	{
+		char byte = U2RXREG;	// Read character from FIFO (U2RXREG)
+		putc(byte);		// Send the character using putc()
+    	IFS1bits.U2RXIF = 0;	// Clear UART2 Rx interrupt flag
+	}
+}
+
 int main(void){
 	
 	configUart2(115200, 'N', 1);	// Configure UART: 115200, N, 8, 1
 	
 	EnableInterrupts();	// Enable global Interrupts
+	while(1);
 	return 0;
 }
