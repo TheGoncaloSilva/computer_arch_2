@@ -84,8 +84,8 @@ int main(void){
 	/* Configue TIMER T2 interrupt (100 Hz) -> See tablet anotations */
 	PR2 = 49999;	// Max counter value
 	T2CONbits.TCKPS = 2;	// divide by 4 -> Timer manual (sect 14, page 14-10)
-	TMR2 = 0;	// TMR1 counter = 0
-	T2CONbits.ON = 1;	// enable Timer 1
+	TMR2 = 0;	// TMR2 counter = 0
+	T2CONbits.ON = 1;	// enable Timer 2
 
 	/* Configure timer T2 interruption system */
 	IPC2bits.T2IP = 2; // Interrupt priority (must be in range [1..6])
