@@ -56,16 +56,26 @@ void configurePwm(){
 	T3CONbits.ON = 1;		// enable Timer 3
 
 	/* Configure OCM Module */
-	// No need to configure pin OC1(RD2) as out, the module already does that
+	// No need to configure pin OC3(RD2) as out, the module already does that
 	OC3CONbits.OCM = 6;		// PWM mode on OCx; fault pin disabled
 	OC3CONbits.OCTSEL = 1;	// Use timer T3 as the time base for PWM generation
 	setPwm(0);				// Ton constant
 	OC3CONbits.ON = 1;		// Enable OC1 module
+
+	// No need to configure pin OC5(RD4) as out, the module already does that
+	OC5CONbits.OCM = 6;		// PWM mode on OCx; fault pin disabled
+	OC5CONbits.OCTSEL = 1;	// Use timer T3 as the time base for PWM generation
+	setPwm(100);			// Ton constant
+	OC5CONbits.ON = 1;		// Enable OC1 module
+
 }
 
 void setPwm(int dutyCycle){
 	// duty_cycle must be in the range [0, 100]
 	OC3RS = (int)((PR3 + 1) * (float)dutyCycle / 100);
+	OC5RS = (int)((PR3 + 1) * (float)(100 - dutyCycle) / 100);	
 	printInt10(OC3RS);
+	putChar('	');
+	printInt10(OC5RS);
 	putChar('\r');
 }
