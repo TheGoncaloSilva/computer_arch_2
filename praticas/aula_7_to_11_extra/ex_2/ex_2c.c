@@ -5,6 +5,7 @@
 
 volatile int counter = 0;
 volatile int maxValue = 100; // Module or max value of the counter
+volatile int freq = 2;
 
 void configure_timers();
 void configure_displays();
@@ -30,53 +31,27 @@ void _int_(VECTOR_T2) isr_T2(void) // Vector in page 74 of family datasheet file
 
 void _int_(VECTOR_ADC) isr_adc(void) // Vector in page 74 of family datasheet file
 {
-	IFS0bits.T2IF = 0;		// Reset T2IF flag
+	int *p = (int *)(&ADC1BUF0);
+	int valAdc = 0, i;
+	for(i = 0; i < 4; i++){		// Calculate buffer average (4 samples)
+		valAdc += p[i*4];
+	}
+	valAdc /= i;
+	freq = reconfigure_timer1(valAdc);
+	IFS1bits.AD1IF = 0;		// Reset AD1IF flag
 }
 
 int main(void){
 	configure_displays();
 	configure_timers();
 	configure_adc();
-	int freq;
 
 	EnableInterrupts();		// Enable global interrupts
 	while(1){
-		char c = inkey();
-		switch(c){
-			case '0':
-				freq = reconfigure_timer1(0);
-				printStr("Nova frequência: ");
-				printInt10(freq);
-				printStr("Hz\n");
-				break;
-			case '1':
-				freq = reconfigure_timer1(1);
-				printStr("Nova frequência: ");
-				printInt10(freq);
-				printStr("Hz\n");
-				break;
-			case '2':
-				freq = reconfigure_timer1(2);
-				printStr("Nova frequência: ");
-				printInt10(freq);
-				printStr("Hz\n");
-				break;
-			case '3':
-				freq = reconfigure_timer1(3);
-				printStr("Nova frequência: ");
-				printInt10(freq);
-				printStr("Hz\n");
-				break;
-			case '4':
-				freq = reconfigure_timer1(4);
-				printStr("Nova frequência: ");
-				printInt10(freq);
-				printStr("Hz\n");
-				break;
-			default:
-				break;
-		}
+		resetCoreTimer();
+		while(readCoreTimer() < 5000000); 	// 4Hz = (20 000 000 / 4)
 
+		AD1CON1bits.ASAM = 1;				// Start A/D conversion
 	}
 	return 0;
 }
@@ -155,7 +130,7 @@ unsigned char toBcd(unsigned char value){
 }
 
 int reconfigure_timer1(int freq){
-	freq = 2 * (1 + freq);
+	freq = 1 + (freq / 127);
 
 	/* Configure TIMER T1 values (10 Hz)*/
 	if(freq == 2) {
